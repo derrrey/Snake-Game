@@ -71,7 +71,7 @@
     <Compile Include="Src\Ecs\EcsInjections.cs" />
     <Compile Include="Src\Ecs\EcsSystems.cs" />
     <Compile Include="Src\Ecs\EcsWorld.cs" />
-    <Compile Include="Src\Application.cs" />
+    <Compile Include="Src\Game.cs" />
     <Compile Include="Src\Components\Pose.cs" />
     <Compile Include="Src\Components\Snake.cs" />
     <Compile Include="Src\SnakeGame.cs" />

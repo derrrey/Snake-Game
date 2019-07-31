@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace SnaekGaem.Src
 {
-    class Application
+    class Game
     {
         // The ecs world instance
         public EcsWorld world { get; set; }
@@ -38,7 +38,7 @@ namespace SnaekGaem.Src
         static List<EntityWithFlag> entities = new List<EntityWithFlag>();
 
         // The constructor initializes all the fields
-        public Application()
+        public Game()
         {
             // Create new ecs world instance
             Logger.Info("Creating world instance.");
@@ -55,7 +55,7 @@ namespace SnaekGaem.Src
         }
 
         // Destroy instances in destructor
-        ~Application()
+        ~Game()
         {
             // Destroy all entities
             Logger.Info("Destroying all entities.");

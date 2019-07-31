@@ -17,14 +17,15 @@ namespace SnaekGaem.Src
         const int MAXFRAMETIME = 1000 / FRAMERATE;
 
         // Reference to the main application
-        Application mainApp = null;
+        Game mainApp = null;
+
 
         // Called once at startup
         public void GameSetup()
         {
             // Create the application
             Logger.Info("Creating main application.");
-            mainApp = new Application();
+            mainApp = new Game();
 
             // Setup game entities
             Logger.Info("Setting up game entities.");
