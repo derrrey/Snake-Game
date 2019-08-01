@@ -172,18 +172,18 @@ namespace SnaekGaem.Src
             CreateEntityWith(ref snakeHead, out headEntity);
 
             // Create rectangle in UI thread
-            mainWindow.Dispatcher.Invoke(() =>
+            mainWindow.DispatchNonBlocking(new Action(() =>
             {
                 Rectangle snakeHeadRec = new Rectangle()
                 {
                     Width = 100,
                     Height = 100,
-                    Name = "TestRect",
+                    Name = headEntity.ToString(),
                     Margin = new Thickness(0, 0, 0, 0),
                     Fill = Brushes.Green,
                 };
                 mainWindow.CreateRectangle(snakeHeadRec);
-            });
+            }));
 
             // Create snake with head
             Snake snake = new Snake();

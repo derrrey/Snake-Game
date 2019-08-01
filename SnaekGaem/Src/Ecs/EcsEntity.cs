@@ -79,7 +79,7 @@ namespace Leopotam.Ecs {
         }
 
         public override string ToString () {
-            return IsNull () ? "Entity-Null" : string.Format ("Entity-{0}:{1}", Id, Gen);
+            return IsNull () ? "Entity-Null" : string.Format ("Entity{0}{1}", Id, Gen);
         }
 #endif
     }

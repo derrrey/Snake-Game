@@ -43,10 +43,16 @@ namespace SnaekGaem
             game.StartGameLoop();
         }
 
-        // Invokes an action to be executed by the main UI thread
-        public void Dispatch(Action action)
+        // Invokes an action to be executed by the main UI thread (non-blocking)
+        public void DispatchNonBlocking(Action action)
         {
             Dispatcher.BeginInvoke(DispatcherPriority.Normal, action);
+        }
+
+        // Invokes an action to be executed by the main UI thread (blocking)
+        public void DispatchBlocking(Action action)
+        {
+            Dispatcher.Invoke(DispatcherPriority.Normal, action);
         }
 
         // Gets the keyboard input and returns the corresponding Coordinates

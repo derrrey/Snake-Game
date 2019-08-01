@@ -18,8 +18,11 @@ namespace SnaekGaem.Src.Systems
     [EcsInject]
     class MovementSystem : IEcsRunSystem
     {
-        // Filter for entities with a pose component
-        EcsFilter<Snake> poseFilteredEntities = null;
+        // Filter for the snake entity
+        EcsFilter<Snake> snakeFilter = null;
+
+        // Filter for the snake segments
+        EcsFilter<Pose> segmentFilter = null;
 
         // Reference to main window
         MainWindow mainWindow = null;
@@ -46,10 +49,10 @@ namespace SnaekGaem.Src.Systems
         void MoveEntities(ref Coordinates newDirection)
         {
             // Move entities in respect to their directional vectors
-            foreach (var id in poseFilteredEntities)
+            foreach (var id in snakeFilter)
             {
                 // Get the corresponding pose component
-                ref var snake = ref poseFilteredEntities.Components1[id];
+                ref var snake = ref snakeFilter.Components1[id];
 
                 // Iterate through snake segments from back to front
                 for (int segmentIndex = snake.segments.Count - 1; segmentIndex >= 0; --segmentIndex)
@@ -77,9 +80,9 @@ namespace SnaekGaem.Src.Systems
                                                          0, 0);
 
                     // Dispatch UI change to UI thread
-                    mainWindow.Dispatch(new Action(() =>
+                    mainWindow.DispatchBlocking(new Action(() =>
                     {
-                        var myRect = mainWindow.FindCanvasChildByName<Rectangle>("TestRect");
+                        var myRect = mainWindow.FindCanvasChildByName<Rectangle>(segmentFilter.Entities[segmentIndex].ToString());
                         if (myRect != null)
                         {
                             myRect.SetValue(Canvas.MarginProperty, newMargins);
