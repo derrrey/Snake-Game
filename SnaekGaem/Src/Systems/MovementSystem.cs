@@ -79,8 +79,11 @@ namespace SnaekGaem.Src.Systems
                     // Dispatch UI change to UI thread
                     mainWindow.Dispatch(new Action(() =>
                     {
-                        var myRect = (Rectangle)mainWindow.FindName("TestRect");
-                        myRect.SetValue(Canvas.MarginProperty, newMargins);
+                        var myRect = mainWindow.FindCanvasChildByName<Rectangle>("TestRect");
+                        if (myRect != null)
+                        {
+                            myRect.SetValue(Canvas.MarginProperty, newMargins);
+                        }
                     }));
 
                     // Debug output

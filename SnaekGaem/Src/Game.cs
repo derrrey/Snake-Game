@@ -10,6 +10,9 @@ using SnaekGaem.Src.Tools;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using System.Windows.Shapes;
+using System.Windows.Media;
+using System.Windows;
 
 namespace SnaekGaem.Src
 {
@@ -20,6 +23,9 @@ namespace SnaekGaem.Src
 
         // All the ecs systems
         public EcsSystems systems { get; set; }
+
+        // Reference to main window
+        MainWindow mainWindow = null;
 
         // Struct with an ecs entity and a deletion flag
         struct EntityWithFlag
@@ -40,6 +46,8 @@ namespace SnaekGaem.Src
         // The constructor initializes all the fields
         public Game(MainWindow mainWindow)
         {
+            this.mainWindow = mainWindow;
+
             // Create new ecs world instance
             Logger.Info("Creating world instance.");
             world = new EcsWorld();
@@ -162,6 +170,20 @@ namespace SnaekGaem.Src
             snakeHead.direction = Coordinates.Right;
             EcsEntity headEntity;
             CreateEntityWith(ref snakeHead, out headEntity);
+
+            // Create rectangle in UI thread
+            mainWindow.Dispatcher.Invoke(() =>
+            {
+                Rectangle snakeHeadRec = new Rectangle()
+                {
+                    Width = 100,
+                    Height = 100,
+                    Name = "TestRect",
+                    Margin = new Thickness(0, 0, 0, 0),
+                    Fill = Brushes.Green,
+                };
+                mainWindow.CreateRectangle(snakeHeadRec);
+            });
 
             // Create snake with head
             Snake snake = new Snake();

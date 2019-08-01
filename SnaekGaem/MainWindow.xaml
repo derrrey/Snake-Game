@@ -7,16 +7,6 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Rectangle Fill="#FFF4F4F5" HorizontalAlignment="Left" Name="TestRect" Height="92" Margin="378,211,0,0" Stroke="Black" VerticalAlignment="Top" Width="91" RenderTransformOrigin="0.535,-0.125">
-            <Rectangle.RenderTransform>
-                <TransformGroup>
-                    <ScaleTransform/>
-                    <SkewTransform AngleX="0.415"/>
-                    <RotateTransform/>
-                    <TranslateTransform X="-0.734"/>
-                </TransformGroup>
-            </Rectangle.RenderTransform>
-        </Rectangle>
-
+        <Canvas Name="canvasArea" HorizontalAlignment="Left" Height="419" VerticalAlignment="Top" Width="792"/>
     </Grid>
 </Window>

@@ -78,5 +78,28 @@ namespace SnaekGaem
 
             return newDirection;
         }
+
+        // Creates a given rectangle on the main canvas
+        public void CreateRectangle(Rectangle newRect)
+        {
+            canvasArea.Children.Add(newRect);
+            Canvas.SetTop(newRect, 0);
+            Canvas.SetLeft(newRect, 0);
+        }
+
+        // Finds a specific child in the visual tree of the main canvas area
+        public T FindCanvasChildByName<T>(string name) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(canvasArea); i++)
+            {
+                var child = VisualTreeHelper.GetChild(canvasArea, i);
+                string controlName = child.GetValue(Control.NameProperty) as string;
+                if (controlName == name)
+                {
+                    return child as T;
+                }
+            }
+            return null;
+        }
     }
 }
