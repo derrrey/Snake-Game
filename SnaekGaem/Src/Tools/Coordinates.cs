@@ -7,7 +7,7 @@ namespace SnaekGaem.Src.Tools
     /*
      * This class specifies a 2-dimensional position using x and y coordinates.
      */
-    class Coordinates
+    public class Coordinates
     {
         public int x { get; set; }
         public int y { get; set; }
@@ -58,5 +58,6 @@ namespace SnaekGaem.Src.Tools
         public static Coordinates Down = new Coordinates(0, 1);
         public static Coordinates Left = new Coordinates(-1, 0);
         public static Coordinates Right = new Coordinates(1, 0);
+        public static Coordinates None = new Coordinates(0, 0);
     }
 }

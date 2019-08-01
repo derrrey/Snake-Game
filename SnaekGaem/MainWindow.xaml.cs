@@ -16,6 +16,7 @@ using System.Windows.Threading;
 using System.Threading;
 
 using SnaekGaem.Src;
+using SnaekGaem.Src.Tools;
 
 namespace SnaekGaem
 {
@@ -46,6 +47,36 @@ namespace SnaekGaem
         public void Dispatch(Action action)
         {
             Dispatcher.BeginInvoke(DispatcherPriority.Normal, action);
+        }
+
+        // Gets the keyboard input and returns the corresponding Coordinates
+        public Coordinates CheckKeyboardInput()
+        {
+            Coordinates newDirection = Coordinates.None;
+
+            // Use dispatcher to get input from UI threaad
+            Dispatcher.Invoke(() =>
+            {
+                // Check for all possible inputs and set direction
+                if (Keyboard.IsKeyDown(Key.W))
+                {
+                    newDirection = Coordinates.Up;
+                }
+                else if (Keyboard.IsKeyDown(Key.A))
+                {
+                    newDirection = Coordinates.Left;
+                }
+                else if (Keyboard.IsKeyDown(Key.S))
+                {
+                    newDirection = Coordinates.Down;
+                }
+                else if (Keyboard.IsKeyDown(Key.D))
+                {
+                    newDirection = Coordinates.Right;
+                }
+            });
+
+            return newDirection;
         }
     }
 }

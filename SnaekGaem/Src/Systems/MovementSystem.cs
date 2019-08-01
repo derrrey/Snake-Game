@@ -10,6 +10,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Windows.Input;
 
 namespace SnaekGaem.Src.Systems
 {
@@ -35,6 +36,15 @@ namespace SnaekGaem.Src.Systems
         // Iterate over entities with pose component and move in corresponce to the directional vector
         public void Run()
         {
+            // Check for keyboard inputs
+            Coordinates newDirection = mainWindow.CheckKeyboardInput();
+
+            // Move entities
+            MoveEntities(ref newDirection);
+        }
+
+        void MoveEntities(ref Coordinates newDirection)
+        {
             // Move entities in respect to their directional vectors
             foreach (var id in poseFilteredEntities)
             {
@@ -42,7 +52,7 @@ namespace SnaekGaem.Src.Systems
                 ref var snake = ref poseFilteredEntities.Components1[id];
 
                 // Iterate through snake segments from back to front
-                for(int segmentIndex = snake.segments.Count - 1; segmentIndex >= 0; --segmentIndex)
+                for (int segmentIndex = snake.segments.Count - 1; segmentIndex >= 0; --segmentIndex)
                 {
                     // If not head, set segment to successor
                     if (segmentIndex != 0)
@@ -52,6 +62,12 @@ namespace SnaekGaem.Src.Systems
                     // Move head in pose direction
                     else
                     {
+                        // Check if new direction is set
+                        if (newDirection != Coordinates.None)
+                        {
+                            snake.segments[segmentIndex].direction = newDirection;
+                        }
+
                         snake.segments[segmentIndex].position += snake.segments[segmentIndex].direction;
                     }
 
