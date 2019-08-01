@@ -18,6 +18,9 @@ namespace SnaekGaem.Src
 {
     class Game
     {
+        // Constants
+        public int segmentSize { get; }
+
         // The ecs world instance
         public EcsWorld world { get; set; }
 
@@ -47,6 +50,7 @@ namespace SnaekGaem.Src
         public Game(MainWindow mainWindow)
         {
             this.mainWindow = mainWindow;
+            segmentSize = 25;
 
             // Create new ecs world instance
             Logger.Info("Creating world instance.");
@@ -55,7 +59,7 @@ namespace SnaekGaem.Src
             // Create the ecs systems
             Logger.Info("Creating systems.");
             systems = new EcsSystems(world)
-                .Add(new MovementSystem(mainWindow));
+                .Add(new SnakeSystem(mainWindow, this));
 
             // Initialize systems
             Logger.Info("Initializing systems.");
@@ -164,32 +168,66 @@ namespace SnaekGaem.Src
         // Sets up the initial entities for the game
         public void GameSetup()
         {
-            // Create snake head
-            Pose snakeHead = new Pose();
-            // Snake head is pointing to the right
-            snakeHead.direction = Coordinates.Right;
-            EcsEntity headEntity;
-            CreateEntityWith(ref snakeHead, out headEntity);
+            // Create snake
+            Snake snake = new Snake();
+            EcsEntity snakeEntity;
+            CreateEntityWith(ref snake, out snakeEntity);
+
+            // Create snake head and add
+            Pose snakeHead = CreateSegment();
+            world.GetComponent<Snake>(snakeEntity).segments.Add(snakeHead);
+        }
+
+        public Pose CreateSegment()
+        {
+            // Create segment pose
+            Pose segmentPose = new Pose();
+
+            // Check it it's the first segment
+            if(entities.Count == 1)
+            {
+                // If yes, set the initial movement direction
+                segmentPose.direction = Coordinates.Right;
+
+                // Set position to be the origin
+                segmentPose.position = new Coordinates(0, 0);
+            }
+            else if(entities.Count == 2)
+            {
+                // Place in opposite direction of snake head
+                Pose headPose = world.GetComponent<Pose>(entities[1].entity);
+                Coordinates oppositeDir = Coordinates.GetOppositeDirection(headPose.direction);
+                segmentPose.position = headPose.position - (oppositeDir * segmentSize);
+            }
+            else
+            {
+                // Place in opposite direction of last snake segment
+                Pose lastPose = world.GetComponent<Pose>(entities[entities.Count - 1].entity);
+                Pose preLastPose = world.GetComponent<Pose>(entities[entities.Count - 2].entity);
+                Coordinates oppositeDir = Coordinates.GetOppositeDirection((lastPose.position - preLastPose.position) / segmentSize);
+                segmentPose.position = lastPose.position - (oppositeDir * segmentSize);
+            }
+
+            EcsEntity segmentEntity;
+            CreateEntityWith(ref segmentPose, out segmentEntity);
 
             // Create rectangle in UI thread
             mainWindow.DispatchNonBlocking(new Action(() =>
             {
-                Rectangle snakeHeadRec = new Rectangle()
+                Rectangle segmentRec = new Rectangle()
                 {
-                    Width = 25,
-                    Height = 25,
-                    Name = headEntity.ToString(),
-                    Margin = new Thickness(0, 0, 0, 0),
+                    Width = segmentSize,
+                    Height = segmentSize,
+                    Name = segmentEntity.ToString(),
+                    Margin = new Thickness(segmentPose.position.x,
+                                           segmentPose.position.y,
+                                           0, 0),
                     Fill = Brushes.Green,
                 };
-                mainWindow.CreateRectangle(snakeHeadRec);
+                mainWindow.CreateRectangle(segmentRec);
             }));
 
-            // Create snake with head
-            Snake snake = new Snake();
-            snake.segments.Add(snakeHead);
-            EcsEntity snakeEntity;
-            CreateEntityWith(ref snake, out snakeEntity);
+            return segmentPose;
         }
     }
 }

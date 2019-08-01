@@ -16,7 +16,7 @@ namespace SnaekGaem.Src.Systems
 {
     // Use Code-Injection for filter
     [EcsInject]
-    class MovementSystem : IEcsRunSystem
+    class SnakeSystem : IEcsRunSystem
     {
         // Filter for the snake entity
         EcsFilter<Snake> snakeFilter = null;
@@ -27,6 +27,9 @@ namespace SnaekGaem.Src.Systems
         // Reference to main window
         MainWindow mainWindow = null;
 
+        // Reference to the main app
+        Game game = null;
+
         // Current movement direction vector
         Coordinates currentDirection = Coordinates.None;
 
@@ -36,9 +39,10 @@ namespace SnaekGaem.Src.Systems
         const long WAITTIME = 1000 / TICKSPERSECOND;
 
         // Set references
-        public MovementSystem(MainWindow mainWindow)
+        public SnakeSystem(MainWindow mainWindow, Game game)
         {
             this.mainWindow = mainWindow;
+            this.game = game;
         }
 
         // Nothing to do on destroy
@@ -61,6 +65,13 @@ namespace SnaekGaem.Src.Systems
 
                 // Set last movement time
                 lastMovementms = currentTime;
+            }
+
+            // Check if the snake has to grow
+            if(snakeFilter.Components1[0] != null && snakeFilter.Components1[0].shouldGrow)
+            {
+                Pose newSegPose = game.CreateSegment();
+                snakeFilter.Components1[0].segments.Add(newSegPose);
             }
         }
 
@@ -89,7 +100,7 @@ namespace SnaekGaem.Src.Systems
                             snake.segments[segmentIndex].direction = currentDirection;
                         }
 
-                        snake.segments[segmentIndex].position += (snake.segments[segmentIndex].direction * 25);
+                        snake.segments[segmentIndex].position += (snake.segments[segmentIndex].direction * game.segmentSize);
                     }
 
                     // Calculate new margins
@@ -106,10 +117,6 @@ namespace SnaekGaem.Src.Systems
                             myRect.SetValue(Canvas.MarginProperty, newMargins);
                         }
                     }));
-
-                    // Debug output
-                    Logger.Info(snake.segments[segmentIndex].position.x + ", " +
-                        snake.segments[segmentIndex].position.y);
                 }
             }
         }

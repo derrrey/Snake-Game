@@ -75,7 +75,7 @@
     <Compile Include="Src\Components\Pose.cs" />
     <Compile Include="Src\Components\Snake.cs" />
     <Compile Include="Src\SnakeGame.cs" />
-    <Compile Include="Src\Systems\MovementSystem.cs" />
+    <Compile Include="Src\Systems\SnakeSystem.cs" />
     <Compile Include="Src\Tools\Coordinates.cs" />
     <Compile Include="Src\Tools\Logger.cs" />
     <Page Include="MainWindow.xaml">

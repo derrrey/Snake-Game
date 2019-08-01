@@ -62,6 +62,10 @@ namespace Leopotam.Ecs {
             var rhs = (EcsEntity) other;
             return Id == rhs.Id && Gen == rhs.Gen;
         }
+        public override string ToString()
+        {
+            return IsNull() ? "Entity-Null" : string.Format("Entity{0}{1}", Id, Gen);
+        }
 #if DEBUG
         public int GetDebugId () {
             return Id;
@@ -76,10 +80,6 @@ namespace Leopotam.Ecs {
             entity.Gen = (ushort) gen;
             entity.Id = id;
             return entity;
-        }
-
-        public override string ToString () {
-            return IsNull () ? "Entity-Null" : string.Format ("Entity{0}{1}", Id, Gen);
         }
 #endif
     }

@@ -62,6 +62,40 @@ namespace SnaekGaem.Src.Tools
             return result;
         }
 
+        // Specifies the /-Operator with one value on the coordinator class
+        public static Coordinates operator/ (Coordinates coords, int value)
+        {
+            Coordinates result = new Coordinates();
+            result.x = coords.x / value;
+            result.y = coords.y / value;
+            return result;
+        }
+
+        // Returns the opposite direction of a given coordinate
+        public static Coordinates GetOppositeDirection(Coordinates coords)
+        {
+            if(coords == Coordinates.Up)
+            {
+                return Coordinates.Down;
+            }
+            else if(coords == Coordinates.Down)
+            {
+                return Coordinates.Up;
+            }
+            else if(coords == Coordinates.Left)
+            {
+                return Coordinates.Right;
+            }
+            else if(coords == Coordinates.Right)
+            {
+                return Coordinates.Left;
+            }
+            else
+            {
+                return Coordinates.None;
+            }
+        }
+
         // Static Coordinates for all 4 directions
         public static Coordinates Up = new Coordinates(0, -1);
         public static Coordinates Down = new Coordinates(0, 1);
