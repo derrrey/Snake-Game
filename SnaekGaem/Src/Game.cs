@@ -88,7 +88,7 @@ namespace SnaekGaem.Src
         }
 
         // Creates an entity with given pose component
-        public void CreateEntityWith<T>(ref T component, out EcsEntity newEntity) where T : class
+        void CreateEntityWith<T>(ref T component, out EcsEntity newEntity) where T : class
         {
             // Check component type
             if (typeof(T).Equals(typeof(Pose)))
