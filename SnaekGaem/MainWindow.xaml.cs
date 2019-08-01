@@ -93,8 +93,14 @@ namespace SnaekGaem
             Canvas.SetLeft(newRect, 0);
         }
 
+        // Removes a rectangle from the main canvas
+        public void RemoveRectangle(Rectangle rect)
+        {
+            canvasArea.Children.Remove(rect);
+        }
+
         // Finds a specific child in the visual tree of the main canvas area
-        public T FindCanvasChildByName<T>(string name) where T : DependencyObject
+        public T GetCanvasChildByName<T>(string name) where T : DependencyObject
         {
             for (int i = 0; i < VisualTreeHelper.GetChildrenCount(canvasArea); i++)
             {

@@ -71,6 +71,18 @@ namespace SnaekGaem.Src.Tools
             return result;
         }
 
+        // Specifies the ==-Operator for two coordinates
+        public static bool operator== (Coordinates coordsA, Coordinates coordsB)
+        {
+            return coordsA.x == coordsB.x && coordsA.y == coordsB.y;
+        }
+
+        // Specifies the !=-Operator for two coordinates
+        public static bool operator!= (Coordinates coordsA, Coordinates coordsB)
+        {
+            return coordsA.x != coordsB.x || coordsA.y != coordsB.y;
+        }
+
         // Returns the opposite direction of a given coordinate
         public static Coordinates GetOppositeDirection(Coordinates coords)
         {

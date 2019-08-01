@@ -70,8 +70,9 @@ namespace SnaekGaem.Src.Systems
             // Check if the snake has to grow
             if(snakeFilter.Components1[0] != null && snakeFilter.Components1[0].shouldGrow)
             {
-                Pose newSegPose = game.CreateSegment();
+                Pose newSegPose = game.CreateOnCanvas(true);
                 snakeFilter.Components1[0].segments.Add(newSegPose);
+                snakeFilter.Components1[0].shouldGrow = false;
             }
         }
 
@@ -111,7 +112,7 @@ namespace SnaekGaem.Src.Systems
                     // Dispatch UI change to UI thread
                     mainWindow.DispatchBlocking(new Action(() =>
                     {
-                        var myRect = mainWindow.FindCanvasChildByName<Rectangle>(segmentFilter.Entities[segmentIndex].ToString());
+                        var myRect = mainWindow.GetCanvasChildByName<Rectangle>(segmentFilter.Entities[segmentIndex].ToString());
                         if (myRect != null)
                         {
                             myRect.SetValue(Canvas.MarginProperty, newMargins);
