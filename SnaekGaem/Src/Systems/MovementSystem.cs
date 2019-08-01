@@ -27,6 +27,14 @@ namespace SnaekGaem.Src.Systems
         // Reference to main window
         MainWindow mainWindow = null;
 
+        // Current movement direction vector
+        Coordinates currentDirection = Coordinates.None;
+
+        // Last frame where the entities were moved
+        long lastMovementms = 0;
+        const int TICKSPERSECOND = 5;
+        const long WAITTIME = 1000 / TICKSPERSECOND;
+
         // Set references
         public MovementSystem(MainWindow mainWindow)
         {
@@ -41,12 +49,22 @@ namespace SnaekGaem.Src.Systems
         {
             // Check for keyboard inputs
             Coordinates newDirection = mainWindow.CheckKeyboardInput();
+            if (newDirection != Coordinates.None)
+                currentDirection = newDirection;
 
-            // Move entities
-            MoveEntities(ref newDirection);
+            // Check if entities have to be moved
+            long currentTime = System.DateTime.Now.Ticks / System.TimeSpan.TicksPerMillisecond;
+            if (lastMovementms == 0 || (currentTime - lastMovementms >= WAITTIME))
+            {
+                // Move entities
+                MoveEntities();
+
+                // Set last movement time
+                lastMovementms = currentTime;
+            }
         }
 
-        void MoveEntities(ref Coordinates newDirection)
+        void MoveEntities()
         {
             // Move entities in respect to their directional vectors
             foreach (var id in snakeFilter)
@@ -66,12 +84,12 @@ namespace SnaekGaem.Src.Systems
                     else
                     {
                         // Check if new direction is set
-                        if (newDirection != Coordinates.None)
+                        if (currentDirection != Coordinates.None)
                         {
-                            snake.segments[segmentIndex].direction = newDirection;
+                            snake.segments[segmentIndex].direction = currentDirection;
                         }
 
-                        snake.segments[segmentIndex].position += snake.segments[segmentIndex].direction;
+                        snake.segments[segmentIndex].position += (snake.segments[segmentIndex].direction * 25);
                     }
 
                     // Calculate new margins

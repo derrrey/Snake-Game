@@ -176,8 +176,8 @@ namespace SnaekGaem.Src
             {
                 Rectangle snakeHeadRec = new Rectangle()
                 {
-                    Width = 100,
-                    Height = 100,
+                    Width = 25,
+                    Height = 25,
                     Name = headEntity.ToString(),
                     Margin = new Thickness(0, 0, 0, 0),
                     Fill = Brushes.Green,

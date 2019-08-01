@@ -53,6 +53,15 @@ namespace SnaekGaem.Src.Tools
             return result;
         }
 
+        // Specifies the *-Operator with one value on the coordinator class
+        public static Coordinates operator* (Coordinates coords, int value)
+        {
+            Coordinates result = new Coordinates();
+            result.x = coords.x * value;
+            result.y = coords.y * value;
+            return result;
+        }
+
         // Static Coordinates for all 4 directions
         public static Coordinates Up = new Coordinates(0, -1);
         public static Coordinates Down = new Coordinates(0, 1);
