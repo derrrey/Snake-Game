@@ -38,7 +38,7 @@ namespace SnaekGaem.Src
         static List<EntityWithFlag> entities = new List<EntityWithFlag>();
 
         // The constructor initializes all the fields
-        public Game()
+        public Game(MainWindow mainWindow)
         {
             // Create new ecs world instance
             Logger.Info("Creating world instance.");
@@ -47,7 +47,7 @@ namespace SnaekGaem.Src
             // Create the ecs systems
             Logger.Info("Creating systems.");
             systems = new EcsSystems(world)
-                .Add(new MovementSystem());
+                .Add(new MovementSystem(mainWindow));
 
             // Initialize systems
             Logger.Info("Initializing systems.");

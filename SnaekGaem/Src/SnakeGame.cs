@@ -13,19 +13,27 @@ namespace SnaekGaem.Src
     class SnakeGame
     {
         // Constants
-        const int FRAMERATE = 1;
+        const int FRAMERATE = 60;
         const int MAXFRAMETIME = 1000 / FRAMERATE;
 
         // Reference to the main application
         Game mainApp = null;
 
+        // Reference to the main window
+        MainWindow mainWindow = null;
+
+        // Set main window reference
+        public SnakeGame(MainWindow mainWindow)
+        {
+            this.mainWindow = mainWindow;
+        }
 
         // Called once at startup
         public void GameSetup()
         {
             // Create the application
             Logger.Info("Creating main application.");
-            mainApp = new Game();
+            mainApp = new Game(mainWindow);
 
             // Setup game entities
             Logger.Info("Setting up game entities.");

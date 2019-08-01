@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using System.Threading;
 
 using SnaekGaem.Src;
@@ -34,11 +35,21 @@ namespace SnaekGaem
         void Game()
         {
             // Game setup
-            SnakeGame game = new SnakeGame();
+            SnakeGame game = new SnakeGame(this);
             game.GameSetup();
 
             // Start game loop
             game.StartGameLoop();
+        }
+
+        // Invokes an action to be executed by the main UI thread
+        public void Dispatch(Thickness newValue)
+        {
+            Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>
+            {
+                var myRect = (Rectangle)this.FindName("TestRect");
+                myRect.SetValue(Canvas.MarginProperty, newValue);
+            }));
         }
     }
 }
