@@ -55,10 +55,17 @@ namespace SnaekGaem.Src.Systems
                         snake.segments[segmentIndex].position += snake.segments[segmentIndex].direction;
                     }
 
+                    // Calculate new margins
+                    Thickness newMargins = new Thickness(snake.segments[segmentIndex].position.x,
+                                                         snake.segments[segmentIndex].position.y,
+                                                         0, 0);
+
                     // Dispatch UI change to UI thread
-                    mainWindow.Dispatch(new Thickness(snake.segments[segmentIndex].position.x,
-                        snake.segments[segmentIndex].position.y,
-                        0, 0));
+                    mainWindow.Dispatch(new Action(() =>
+                    {
+                        var myRect = (Rectangle)mainWindow.FindName("TestRect");
+                        myRect.SetValue(Canvas.MarginProperty, newMargins);
+                    }));
 
                     // Debug output
                     Logger.Info(snake.segments[segmentIndex].position.x + ", " +

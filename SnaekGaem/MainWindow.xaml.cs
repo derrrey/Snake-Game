@@ -43,13 +43,9 @@ namespace SnaekGaem
         }
 
         // Invokes an action to be executed by the main UI thread
-        public void Dispatch(Thickness newValue)
+        public void Dispatch(Action action)
         {
-            Dispatcher.BeginInvoke(DispatcherPriority.Normal, new Action(() =>
-            {
-                var myRect = (Rectangle)this.FindName("TestRect");
-                myRect.SetValue(Canvas.MarginProperty, newValue);
-            }));
+            Dispatcher.BeginInvoke(DispatcherPriority.Normal, action);
         }
     }
 }
