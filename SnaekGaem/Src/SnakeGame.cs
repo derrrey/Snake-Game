@@ -13,7 +13,7 @@ namespace SnaekGaem.Src
     class SnakeGame
     {
         // Constants
-        const int FRAMERATE = 60;
+        const int FRAMERATE = 100;
         const int MAXFRAMETIME = 1000 / FRAMERATE;
 
         // Reference to the main application
