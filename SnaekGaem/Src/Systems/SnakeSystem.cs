@@ -121,7 +121,35 @@ namespace SnaekGaem.Src.Systems
                             snake.segments[segmentIndex].direction = currentDirection;
                         }
 
+                        // Move in direction
                         snake.segments[segmentIndex].position += (snake.segments[segmentIndex].direction * game.segmentSize);
+
+                        // Get window sizes from UI thread
+                        double windowWidth = 0;
+                        double windowHeight = 0;
+                        mainWindow.DispatchBlocking(new Action(() =>
+                        {
+                            windowWidth = mainWindow.Width;
+                            windowHeight = mainWindow.Height;
+                        }));
+
+                        // If the snake is out of bounds, move to opposite side
+                        if(snake.segments[segmentIndex].position.x < 0)
+                        {
+                            snake.segments[segmentIndex].position.x += Convert.ToInt32(windowWidth);
+                        }
+                        if (snake.segments[segmentIndex].position.y < 0)
+                        {
+                            snake.segments[segmentIndex].position.y += Convert.ToInt32(windowHeight);
+                        }
+                        if (snake.segments[segmentIndex].position.x > windowWidth)
+                        {
+                            snake.segments[segmentIndex].position.x -= Convert.ToInt32(windowWidth);
+                        }
+                        if (snake.segments[segmentIndex].position.y > windowHeight)
+                        {
+                            snake.segments[segmentIndex].position.y -= Convert.ToInt32(windowHeight);
+                        }
                     }
 
                     // Calculate new margins
