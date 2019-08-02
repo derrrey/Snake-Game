@@ -81,6 +81,9 @@ namespace SnaekGaem.Src
             // Initialize systems
             Logger.Info("Initializing systems.");
             systems.Initialize();
+
+            // Set initial score
+            SetScore(0);
         }
 
         // Destroy instances in destructor
