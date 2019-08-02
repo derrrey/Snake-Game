@@ -74,12 +74,6 @@ namespace SnaekGaem.Src
                 }
             }
 
-            // Tell the UI thread the player lost
-            mainWindow.DispatchNonBlocking(new Action(() =>
-            {
-                mainWindow.GameOver();
-            }));
-
             // Remove entities
             game.RemoveAllEntities();
         }

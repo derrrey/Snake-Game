@@ -29,11 +29,16 @@ namespace SnaekGaem
             InitializeComponent();
 
             // Start game in new thread
-            Thread gameThread = new Thread(Game);
+            StartGame();
+        }
+
+        void StartGame()
+        {
+            Thread gameThread = new Thread(GameThread);
             gameThread.Start();
         }
 
-        void Game()
+        void GameThread()
         {
             // Game setup
             SnakeGame game = new SnakeGame(this);
@@ -41,6 +46,70 @@ namespace SnaekGaem
 
             // Start game loop
             game.StartGameLoop();
+
+            // Set game over screen
+            SetGameOverScreen();
+
+            // Check keyboard input
+            // Does the player want to retry?
+            bool retry = false;
+            bool quit = false;
+            while(!retry && !quit)
+            {
+                DispatchBlocking(new Action(() => {
+                    if (Keyboard.IsKeyDown(Key.R))
+                    {
+                        retry = true;
+                    }
+                    else if (Keyboard.IsKeyDown(Key.Q))
+                    {
+                        quit = true;
+                    }
+                }));
+            }
+
+            // If the player wants to retry, restart the method
+            if (retry)
+            {
+                ResetGameOverScreen();
+                GameThread();
+            }
+            else if (quit)
+            {
+                // Quit the application
+                DispatchNonBlocking(new Action(() =>
+                {
+                    Application.Current.Shutdown();
+                }));
+            }
+        }
+
+        void SetGameOverScreen()
+        {
+            // Set game over screen
+            DispatchNonBlocking(new Action(() =>
+            {
+                // Move score box to the middle of the screen
+                scoreText.HorizontalAlignment = HorizontalAlignment.Center;
+                scoreText.VerticalAlignment = VerticalAlignment.Center;
+
+                // Show game over / retry text
+                gameOverText.Visibility = Visibility.Visible;
+            }));
+        }
+
+        void ResetGameOverScreen()
+        {
+            // Set game over screen
+            DispatchNonBlocking(new Action(() =>
+            {
+                // Move score box to the middle of the screen
+                scoreText.HorizontalAlignment = HorizontalAlignment.Right;
+                scoreText.VerticalAlignment = VerticalAlignment.Top;
+
+                // Show game over / retry text
+                gameOverText.Visibility = Visibility.Hidden;
+            }));
         }
 
         // Invokes an action to be executed by the main UI thread (non-blocking)
@@ -83,17 +152,6 @@ namespace SnaekGaem
             });
 
             return newDirection;
-        }
-
-        // Sets the game over screen
-        public void GameOver()
-        {
-            // Move score box to the middle of the screen
-            scoreText.HorizontalAlignment = HorizontalAlignment.Center;
-            scoreText.VerticalAlignment = VerticalAlignment.Center;
-
-            // Show game over / retry text
-            gameOverText.Visibility = Visibility.Visible;
         }
 
         // Sets the given score as new score text
