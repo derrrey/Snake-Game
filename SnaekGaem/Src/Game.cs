@@ -188,8 +188,34 @@ namespace SnaekGaem.Src
                 world.RemoveEntity(flaggedEntity.entity);
             }
 
+            // Remove from canvas
+            mainWindow.DispatchBlocking(new Action(() =>
+            {
+                foreach (EntityWithFlag entity in entities)
+                {
+                    if (entity.deletionFlag == true)
+                    {
+                        Rectangle entityRect = mainWindow.GetCanvasChildByName<Rectangle>(entity.entity.ToString());
+                        mainWindow.RemoveRectangle(entityRect);
+                    }
+                }
+            }));
+
             // Remove from entities list
             entities.RemoveAll(entity => entity.deletionFlag == true);
+        }
+
+        // Removes all entities
+        public void RemoveAllEntities()
+        {
+            // Set deletion flags
+            for(int index = 0; index < entities.Count; ++index)
+            {
+                SetDeletionFlag(entities[index].entity.Id);
+            }
+
+            // Remove entities
+            RemoveFlaggedEntities();
         }
 
         // Update the application

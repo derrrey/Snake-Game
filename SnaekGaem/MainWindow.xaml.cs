@@ -85,6 +85,17 @@ namespace SnaekGaem
             return newDirection;
         }
 
+        // Sets the game over screen
+        public void GameOver()
+        {
+            // Move score box to the middle of the screen
+            scoreText.HorizontalAlignment = HorizontalAlignment.Center;
+            scoreText.VerticalAlignment = VerticalAlignment.Center;
+
+            // Show game over / retry text
+            gameOverText.Visibility = Visibility.Visible;
+        }
+
         // Sets the given score as new score text
         public void SetScoreText(int score)
         {

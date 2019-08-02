@@ -73,6 +73,15 @@ namespace SnaekGaem.Src
                     System.Threading.Thread.Sleep(Convert.ToInt32(MAXFRAMETIME - frameTime));
                 }
             }
+
+            // Tell the UI thread the player lost
+            mainWindow.DispatchNonBlocking(new Action(() =>
+            {
+                mainWindow.GameOver();
+            }));
+
+            // Remove entities
+            game.RemoveAllEntities();
         }
     }
 }

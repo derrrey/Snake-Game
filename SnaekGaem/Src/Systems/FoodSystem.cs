@@ -56,13 +56,6 @@ namespace SnaekGaem.Src.Systems
             if (snakeFilter.Components1[0] != null && foodFilter.Components1[0] != null
                 && snakeFilter.Components1[0].segments[0].position == foodFilter.Components1[0].pose.position)
             {
-                // Remove from canvas
-                mainWindow.DispatchNonBlocking(new Action(() =>
-                {
-                    Rectangle foodRect = mainWindow.GetCanvasChildByName<Rectangle>(foodFilter.Entities[0].ToString());
-                    mainWindow.RemoveRectangle(foodRect);
-                }));
-
                 // Mark the food for removal in ecs
                 game.SetDeletionFlag(foodFilter.Entities[0].Id);
 
