@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Windows.Input;
+using System.Linq;
 
 namespace SnaekGaem.Src.Systems
 {
@@ -51,6 +52,21 @@ namespace SnaekGaem.Src.Systems
         // Iterate over entities with pose component and move in corresponce to the directional vector
         public void Run()
         {
+            // Check for game over
+            if (GameOver())
+            {
+                // Set game over state for game
+                game.gameOver = true;
+            }
+
+            // Check if the snake has to grow
+            if (snakeFilter.Components1[0] != null && snakeFilter.Components1[0].shouldGrow)
+            {
+                Pose newSegPose = game.CreateOnCanvas(true);
+                snakeFilter.Components1[0].segments.Add(newSegPose);
+                snakeFilter.Components1[0].shouldGrow = false;
+            }
+
             // Check for keyboard inputs
             Coordinates newDirection = mainWindow.CheckKeyboardInput();
             if (newDirection != Coordinates.None)
@@ -66,14 +82,18 @@ namespace SnaekGaem.Src.Systems
                 // Set last movement time
                 lastMovementms = currentTime;
             }
+        }
 
-            // Check if the snake has to grow
-            if(snakeFilter.Components1[0] != null && snakeFilter.Components1[0].shouldGrow)
+        bool GameOver()
+        {
+            // Only check when there are components attached to the snake
+            if (snakeFilter.Components1[0] != null && snakeFilter.Components1[0].segments.Count > 0)
             {
-                Pose newSegPose = game.CreateOnCanvas(true);
-                snakeFilter.Components1[0].segments.Add(newSegPose);
-                snakeFilter.Components1[0].shouldGrow = false;
+                // The game is over when the snake's head overlaps with a segment
+                Pose snakeHead = snakeFilter.Components1[0].segments[0];
+                return snakeFilter.Components1[0].segments.Where(seg => seg.position == snakeHead.position).Count() > 1;
             }
+            return false;
         }
 
         void MoveEntities()

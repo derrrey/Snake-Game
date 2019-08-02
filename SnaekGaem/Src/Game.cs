@@ -27,6 +27,9 @@ namespace SnaekGaem.Src
         // All the ecs systems
         public EcsSystems systems { get; set; }
 
+        // Is the game over?
+        public bool gameOver = false;
+
         // Reference to main window
         MainWindow mainWindow = null;
 

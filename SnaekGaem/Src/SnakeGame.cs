@@ -17,7 +17,7 @@ namespace SnaekGaem.Src
         const int MAXFRAMETIME = 1000 / FRAMERATE;
 
         // Reference to the main application
-        Game mainApp = null;
+        Game game = null;
 
         // Reference to the main window
         MainWindow mainWindow = null;
@@ -33,11 +33,11 @@ namespace SnaekGaem.Src
         {
             // Create the application
             Logger.Info("Creating main application.");
-            mainApp = new Game(mainWindow);
+            game = new Game(mainWindow);
 
             // Setup game entities
             Logger.Info("Setting up game entities.");
-            mainApp.GameSetup();
+            game.GameSetup();
         }
 
         // Main game loop.
@@ -50,19 +50,19 @@ namespace SnaekGaem.Src
             long frameTime;
 
             // Main game loop
-            while (true)
+            while (!game.gameOver)
             {
                 // Get time of frame start
                 frameStart = System.DateTime.Now.Ticks / System.TimeSpan.TicksPerMillisecond;
 
                 // Update the app
-                mainApp.Update();
+                game.Update();
 
                 // Remove flagged entities
-                mainApp.RemoveFlaggedEntities();
+                game.RemoveFlaggedEntities();
 
                 // Remove one frame components
-                mainApp.world.RemoveOneFrameComponents();
+                game.world.RemoveOneFrameComponents();
 
                 // Calculate frame time
                 frameTime = (System.DateTime.Now.Ticks / System.TimeSpan.TicksPerMillisecond) - frameStart;
