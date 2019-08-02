@@ -30,6 +30,9 @@ namespace SnaekGaem.Src
         // Is the game over?
         public bool gameOver = false;
 
+        // The current score
+        public int score = 0;
+
         // Reference to main window
         MainWindow mainWindow = null;
 
@@ -44,6 +47,16 @@ namespace SnaekGaem.Src
                 this.entity = entity;
                 this.deletionFlag = deletionFlag;
             }
+        }
+
+        // Sets a new player score
+        public void SetScore(int toAdd)
+        {
+            score += toAdd;
+            mainWindow.DispatchNonBlocking(new Action(() =>
+            {
+                mainWindow.SetScoreText(score);
+            }));
         }
 
         // All the entities that were created

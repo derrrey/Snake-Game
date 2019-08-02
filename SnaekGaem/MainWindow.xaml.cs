@@ -85,6 +85,12 @@ namespace SnaekGaem
             return newDirection;
         }
 
+        // Sets the given score as new score text
+        public void SetScoreText(int score)
+        {
+            scoreText.Text = $"Score: {score}";
+        }
+
         // Creates a given rectangle on the main canvas
         public void CreateRectangle(Rectangle newRect)
         {

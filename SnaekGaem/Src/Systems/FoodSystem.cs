@@ -27,6 +27,12 @@ namespace SnaekGaem.Src.Systems
         // Reference to main window
         MainWindow mainWindow = null;
 
+        // The number of food that was eaten
+        int foodEaten = 0;
+
+        // The number of points food gives
+        const int FOODSCORE = 5;
+
         // Reference to the main app
         Game game = null;
 
@@ -62,6 +68,10 @@ namespace SnaekGaem.Src.Systems
 
                 // Snake has to grow
                 snakeFilter.Components1[0].shouldGrow = true;
+
+                // Tell the score change to the game instance
+                ++foodEaten;
+                game.SetScore(foodEaten * FOODSCORE);
 
                 // Spawn new food
                 spawnFood = true;
