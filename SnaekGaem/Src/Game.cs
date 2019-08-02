@@ -218,7 +218,7 @@ namespace SnaekGaem.Src
                     segmentPose.direction = Coordinates.Right;
 
                     // Set position to be the origin
-                    segmentPose.position = new Coordinates(0, 0);
+                    segmentPose.position = new Coordinates(1, 1);
                 }
                 else if (snake.segments.Count == 1)
                 {
@@ -253,10 +253,10 @@ namespace SnaekGaem.Src
                 // Set random position
                 Random random = new Random();
                 Food food = new Food();
-                double maxWidthGrid = windowWidth / segmentSize;
-                double maxHeightGrid = windowHeight / segmentSize;
-                food.pose.position = new Coordinates(random.Next(0, Convert.ToInt32(maxWidthGrid)) * segmentSize,
-                                                       random.Next(0, Convert.ToInt32(maxHeightGrid)) * segmentSize);
+                int maxWidthGrid = Convert.ToInt32(Math.Floor(windowWidth / segmentSize)) - 1;
+                int maxHeightGrid = Convert.ToInt32(Math.Floor(windowHeight / segmentSize)) - 1;
+                food.pose.position = new Coordinates((random.Next(1, maxWidthGrid) * segmentSize) + 1,
+                                                       (random.Next(1, maxHeightGrid) * segmentSize) + 1);
 
                 segmentPose = food.pose;
                 CreateEntityWith(ref food, out newEntity);

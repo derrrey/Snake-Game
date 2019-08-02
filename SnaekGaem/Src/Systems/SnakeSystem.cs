@@ -133,22 +133,26 @@ namespace SnaekGaem.Src.Systems
                             windowHeight = mainWindow.Height;
                         }));
 
+                        // Calculate max position on grid
+                        int maxWidthGrid = ((Convert.ToInt32(Math.Floor(windowWidth / game.segmentSize))) - 1) * game.segmentSize;
+                        int maxHeightGrid = ((Convert.ToInt32(Math.Floor(windowHeight / game.segmentSize))) - 1) * game.segmentSize;
+
                         // If the snake is out of bounds, move to opposite side
-                        if(snake.segments[segmentIndex].position.x < 0)
+                        if (snake.segments[segmentIndex].position.x < 0)
                         {
-                            snake.segments[segmentIndex].position.x += Convert.ToInt32(windowWidth);
+                            snake.segments[segmentIndex].position.x += maxWidthGrid;
                         }
                         if (snake.segments[segmentIndex].position.y < 0)
                         {
-                            snake.segments[segmentIndex].position.y += Convert.ToInt32(windowHeight);
+                            snake.segments[segmentIndex].position.y += maxHeightGrid;
                         }
-                        if (snake.segments[segmentIndex].position.x > windowWidth)
+                        if (snake.segments[segmentIndex].position.x > maxWidthGrid)
                         {
-                            snake.segments[segmentIndex].position.x -= Convert.ToInt32(windowWidth);
+                            snake.segments[segmentIndex].position.x = 1;
                         }
-                        if (snake.segments[segmentIndex].position.y > windowHeight)
+                        if (snake.segments[segmentIndex].position.y > maxHeightGrid)
                         {
-                            snake.segments[segmentIndex].position.y -= Convert.ToInt32(windowHeight);
+                            snake.segments[segmentIndex].position.y = 1;
                         }
                     }
 
