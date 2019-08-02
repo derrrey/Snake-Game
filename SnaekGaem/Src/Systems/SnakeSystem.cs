@@ -36,7 +36,7 @@ namespace SnaekGaem.Src.Systems
 
         // Last frame where the entities were moved
         long lastMovementms = 0;
-        const int TICKSPERSECOND = 5;
+        const int TICKSPERSECOND = 10;
         const long WAITTIME = 1000 / TICKSPERSECOND;
 
         // Set references

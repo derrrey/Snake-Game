@@ -53,7 +53,7 @@ namespace SnaekGaem.Src
         public Game(MainWindow mainWindow)
         {
             this.mainWindow = mainWindow;
-            segmentSize = 25;
+            segmentSize = 20;
 
             // Create new ecs world instance
             Logger.Info("Creating world instance.");
