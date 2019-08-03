@@ -288,17 +288,17 @@ namespace SnaekGaem.Src
 
                 mainWindow.DispatchBlocking(new Action(() =>
                 {
-                    windowWidth = mainWindow.Width;
-                    windowHeight = mainWindow.Height;
+                    windowWidth = mainWindow.canvasArea.Width;
+                    windowHeight = mainWindow.canvasArea.Height;
                 }));
 
                 // Set random position
                 Random random = new Random();
                 Food food = new Food();
-                int maxWidthGrid = Convert.ToInt32(Math.Floor(windowWidth / segmentSize)) - 1;
-                int maxHeightGrid = Convert.ToInt32(Math.Floor(windowHeight / segmentSize)) - 1;
-                food.pose.position = new Coordinates((random.Next(1, maxWidthGrid) * segmentSize) + 1,
-                                                       (random.Next(1, maxHeightGrid) * segmentSize) + 1);
+                int maxWidthGrid = Convert.ToInt32(Math.Floor(windowWidth / segmentSize));
+                int maxHeightGrid = (Convert.ToInt32(Math.Floor(windowHeight / segmentSize))) + 1;
+                food.pose.position = new Coordinates(((random.Next(1, maxWidthGrid) * segmentSize) + 1),
+                                                       (((random.Next(1, maxHeightGrid) * segmentSize) + 1)));
 
                 segmentPose = food.pose;
                 CreateEntityWith(ref food, out newEntity);

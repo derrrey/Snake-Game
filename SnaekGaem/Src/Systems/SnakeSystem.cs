@@ -129,13 +129,13 @@ namespace SnaekGaem.Src.Systems
                         double windowHeight = 0;
                         mainWindow.DispatchBlocking(new Action(() =>
                         {
-                            windowWidth = mainWindow.Width;
-                            windowHeight = mainWindow.Height;
+                            windowWidth = mainWindow.canvasArea.Width;
+                            windowHeight = mainWindow.canvasArea.Height;
                         }));
 
                         // Calculate max position on grid
-                        int maxWidthGrid = ((Convert.ToInt32(Math.Floor(windowWidth / game.segmentSize))) - 1) * game.segmentSize;
-                        int maxHeightGrid = ((Convert.ToInt32(Math.Floor(windowHeight / game.segmentSize))) - 1) * game.segmentSize;
+                        int maxWidthGrid = (Convert.ToInt32(Math.Floor(windowWidth / game.segmentSize))) * game.segmentSize;
+                        int maxHeightGrid = ((Convert.ToInt32(Math.Floor(windowHeight / game.segmentSize))) + 1) * game.segmentSize;
 
                         // If the snake is out of bounds, move to opposite side
                         if (snake.segments[segmentIndex].position.x < 0)
