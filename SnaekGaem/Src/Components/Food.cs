@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace SnaekGaem.Src.Components
+﻿namespace SnaekGaem.Src.Components
 {
     // Food is represented as a pose
     class Food

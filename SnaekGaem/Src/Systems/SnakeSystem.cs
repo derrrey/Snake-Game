@@ -9,8 +9,6 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Shapes;
-using System.Windows.Threading;
-using System.Windows.Input;
 using System.Linq;
 
 namespace SnaekGaem.Src.Systems
