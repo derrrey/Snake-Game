@@ -3,9 +3,7 @@
  * The pose is defined by a position and a rotation.
  */
 
-using SnaekGaem.Src.Tools;
-
-namespace SnaekGaem.Src.Components
+namespace SnaekGaem.Src.Tools
 {
     class Pose
     {
@@ -27,8 +25,8 @@ namespace SnaekGaem.Src.Components
             this.direction = direction;
         }
 
-        // Copies the values from the other pose into this pose.
-        public void Set(ref Pose copyFrom)
+        // Copies the values from the other pose into this segment.
+        public void Set(Pose copyFrom)
         {
             this.position = copyFrom.position;
             this.direction = copyFrom.direction;

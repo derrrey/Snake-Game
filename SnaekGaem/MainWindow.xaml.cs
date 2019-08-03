@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Threading;
@@ -20,7 +12,7 @@ using SnaekGaem.Src.Tools;
 
 namespace SnaekGaem
 {
-    // Logik for MainWindow.xaml
+    // Logic for MainWindow.xaml
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -32,12 +24,14 @@ namespace SnaekGaem
             StartGame();
         }
 
+        // Starts the game in a new thread
         void StartGame()
         {
             Thread gameThread = new Thread(GameThread);
             gameThread.Start();
         }
 
+        // The main game method that is run in an extra thread
         void GameThread()
         {
             // Game setup
@@ -47,7 +41,7 @@ namespace SnaekGaem
             game.StartGameLoop();
 
             // Set game over screen
-            SetGameOverScreen();
+            GameOverScreen(true);
 
             // Check keyboard input
             // Does the player want to retry?
@@ -70,12 +64,12 @@ namespace SnaekGaem
             // If the player wants to retry, restart the method
             if (retry)
             {
-                ResetGameOverScreen();
+                GameOverScreen(false);
                 GameThread();
             }
+            // Otherwise quit the application
             else if (quit)
             {
-                // Quit the application
                 DispatchNonBlocking(new Action(() =>
                 {
                     Application.Current.Shutdown();
@@ -83,31 +77,19 @@ namespace SnaekGaem
             }
         }
 
-        void SetGameOverScreen()
+        // Sets/Resets a game over screen layout with the score in the middle
+        // and a small text beneath it
+        void GameOverScreen(bool setLayout)
         {
-            // Set game over screen
+            // Set/Reset game over screen
             DispatchNonBlocking(new Action(() =>
             {
-                // Move score box to the middle of the screen
-                scoreText.HorizontalAlignment = HorizontalAlignment.Center;
-                scoreText.VerticalAlignment = VerticalAlignment.Center;
+                // Move score box
+                scoreText.HorizontalAlignment = setLayout ? HorizontalAlignment.Center : HorizontalAlignment.Right;
+                scoreText.VerticalAlignment = setLayout? VerticalAlignment.Center : VerticalAlignment.Top;
 
-                // Show game over / retry text
-                gameOverText.Visibility = Visibility.Visible;
-            }));
-        }
-
-        void ResetGameOverScreen()
-        {
-            // Set game over screen
-            DispatchNonBlocking(new Action(() =>
-            {
-                // Move score box to the middle of the screen
-                scoreText.HorizontalAlignment = HorizontalAlignment.Right;
-                scoreText.VerticalAlignment = VerticalAlignment.Top;
-
-                // Show game over / retry text
-                gameOverText.Visibility = Visibility.Hidden;
+                // Show/Hide game over/retry text
+                gameOverText.Visibility = setLayout ? Visibility.Visible : Visibility.Hidden;
             }));
         }
 
@@ -129,7 +111,7 @@ namespace SnaekGaem
             Coordinates newDirection = Coordinates.None;
 
             // Use dispatcher to get input from UI threaad
-            Dispatcher.Invoke(() =>
+            DispatchBlocking(() =>
             {
                 // Check for all possible inputs and set direction
                 if (Keyboard.IsKeyDown(Key.W))

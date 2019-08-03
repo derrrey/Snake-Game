@@ -104,25 +104,25 @@ namespace SnaekGaem.Src.Tools
         // Returns the opposite direction of a given coordinate
         public static Coordinates GetOppositeDirection(Coordinates coords)
         {
-            if(coords == Coordinates.Up)
+            if(coords == Up)
             {
-                return Coordinates.Down;
+                return Down;
             }
-            else if(coords == Coordinates.Down)
+            else if(coords == Down)
             {
-                return Coordinates.Up;
+                return Up;
             }
-            else if(coords == Coordinates.Left)
+            else if(coords == Left)
             {
-                return Coordinates.Right;
+                return Right;
             }
-            else if(coords == Coordinates.Right)
+            else if(coords == Right)
             {
-                return Coordinates.Left;
+                return Left;
             }
             else
             {
-                return Coordinates.None;
+                return None;
             }
         }
 

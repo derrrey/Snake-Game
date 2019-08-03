@@ -5,10 +5,7 @@
 using Leopotam.Ecs;
 using SnaekGaem.Src.Components;
 using SnaekGaem.Src.Tools;
-using System;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Shapes;
 using System.Linq;
 
 namespace SnaekGaem.Src.Systems
@@ -21,10 +18,7 @@ namespace SnaekGaem.Src.Systems
         EcsFilter<Snake> snakeFilter = null;
 
         // Filter for the snake segments
-        EcsFilter<Pose> segmentFilter = null;
-
-        // Reference to main window
-        MainWindow mainWindow = null;
+        EcsFilter<Segment> segmentFilter = null;
 
         // Reference to the main app
         Game game = null;
@@ -34,13 +28,16 @@ namespace SnaekGaem.Src.Systems
 
         // Last frame where the entities were moved
         long lastMovementms = 0;
+
+        // The number of ticks per second for the snake movement
         const int TICKSPERSECOND = 10;
-        const long WAITTIME = 1000 / TICKSPERSECOND;
+
+        // The time period between snake movements
+        const long WAITTIMEMS = 1000 / TICKSPERSECOND;
 
         // Set references
-        public SnakeSystem(MainWindow mainWindow, Game game)
+        public SnakeSystem(Game game)
         {
-            this.mainWindow = mainWindow;
             this.game = game;
         }
 
@@ -53,26 +50,27 @@ namespace SnaekGaem.Src.Systems
             // Check for game over
             if (GameOver())
             {
-                // Set game over state for game
+                // Set game over state for game and return
                 game.gameOver = true;
+                return;
             }
 
             // Check if the snake has to grow
             if (snakeFilter.Components1[0] != null && snakeFilter.Components1[0].shouldGrow)
             {
-                Pose newSegPose = game.CreateOnCanvas(true);
+                Segment newSegPose = game.CreateOnCanvas(true);
                 snakeFilter.Components1[0].segments.Add(newSegPose);
                 snakeFilter.Components1[0].shouldGrow = false;
             }
 
             // Check for keyboard inputs
-            Coordinates newDirection = mainWindow.CheckKeyboardInput();
+            Coordinates newDirection = game.GetKeyboardInput();
             if (newDirection != Coordinates.None)
                 currentDirection = newDirection;
 
             // Check if entities have to be moved
-            long currentTime = System.DateTime.Now.Ticks / System.TimeSpan.TicksPerMillisecond;
-            if (lastMovementms == 0 || (currentTime - lastMovementms >= WAITTIME))
+            long currentTime = game.GetCurrentTime();
+            if (lastMovementms == 0 || (currentTime - lastMovementms >= WAITTIMEMS))
             {
                 // Move entities
                 MoveEntities();
@@ -88,8 +86,8 @@ namespace SnaekGaem.Src.Systems
             if (snakeFilter.Components1[0] != null && snakeFilter.Components1[0].segments.Count > 0)
             {
                 // The game is over when the snake's head overlaps with a segment
-                Pose snakeHead = snakeFilter.Components1[0].segments[0];
-                return snakeFilter.Components1[0].segments.Where(seg => seg.position == snakeHead.position).Count() > 1;
+                Segment snakeHead = snakeFilter.Components1[0].segments[0];
+                return snakeFilter.Components1[0].segments.Where(seg => seg.pose.position == snakeHead.pose.position).Count() > 1;
             }
             return false;
         }
@@ -108,7 +106,7 @@ namespace SnaekGaem.Src.Systems
                     // If not head, set segment to successor
                     if (segmentIndex != 0)
                     {
-                        snake.segments[segmentIndex].position = snake.segments[segmentIndex - 1].position;
+                        snake.segments[segmentIndex].pose.position = snake.segments[segmentIndex - 1].pose.position;
                     }
                     // Move head in pose direction
                     else
@@ -116,58 +114,41 @@ namespace SnaekGaem.Src.Systems
                         // Check if new direction is set
                         if (currentDirection != Coordinates.None)
                         {
-                            snake.segments[segmentIndex].direction = currentDirection;
+                            snake.segments[segmentIndex].pose.direction = currentDirection;
                         }
 
                         // Move in direction
-                        snake.segments[segmentIndex].position += (snake.segments[segmentIndex].direction * game.segmentSize);
+                        snake.segments[segmentIndex].pose.position += (snake.segments[segmentIndex].pose.direction * game.segmentSize);
 
-                        // Get window sizes from UI thread
-                        double windowWidth = 0;
-                        double windowHeight = 0;
-                        mainWindow.DispatchBlocking(new Action(() =>
-                        {
-                            windowWidth = mainWindow.canvasArea.Width;
-                            windowHeight = mainWindow.canvasArea.Height;
-                        }));
-
-                        // Calculate max position on grid
-                        int maxWidthGrid = (Convert.ToInt32(Math.Floor(windowWidth / game.segmentSize))) * game.segmentSize;
-                        int maxHeightGrid = ((Convert.ToInt32(Math.Floor(windowHeight / game.segmentSize))) + 1) * game.segmentSize;
+                        // Get max grid sizes
+                        Coordinates maxGridSizes = game.GetMaxGridSizes();
 
                         // If the snake is out of bounds, move to opposite side
-                        if (snake.segments[segmentIndex].position.x < 0)
+                        if (snake.segments[segmentIndex].pose.position.x < 0)
                         {
-                            snake.segments[segmentIndex].position.x += maxWidthGrid;
+                            snake.segments[segmentIndex].pose.position.x += maxGridSizes.x;
                         }
-                        if (snake.segments[segmentIndex].position.y < 0)
+                        if (snake.segments[segmentIndex].pose.position.y < 0)
                         {
-                            snake.segments[segmentIndex].position.y += maxHeightGrid;
+                            snake.segments[segmentIndex].pose.position.y += maxGridSizes.y;
                         }
-                        if (snake.segments[segmentIndex].position.x > maxWidthGrid)
+                        if (snake.segments[segmentIndex].pose.position.x > maxGridSizes.x)
                         {
-                            snake.segments[segmentIndex].position.x = 1;
+                            snake.segments[segmentIndex].pose.position.x = 1;
                         }
-                        if (snake.segments[segmentIndex].position.y > maxHeightGrid)
+                        if (snake.segments[segmentIndex].pose.position.y > maxGridSizes.y)
                         {
-                            snake.segments[segmentIndex].position.y = 1;
+                            snake.segments[segmentIndex].pose.position.y = 1;
                         }
                     }
 
                     // Calculate new margins
-                    Thickness newMargins = new Thickness(snake.segments[segmentIndex].position.x,
-                                                         snake.segments[segmentIndex].position.y,
+                    Thickness newMargins = new Thickness(snake.segments[segmentIndex].pose.position.x,
+                                                         snake.segments[segmentIndex].pose.position.y,
                                                          0, 0);
 
-                    // Dispatch UI change to UI thread
-                    mainWindow.DispatchBlocking(new Action(() =>
-                    {
-                        var myRect = mainWindow.GetCanvasChildByName<Rectangle>(segmentFilter.Entities[segmentIndex].ToString());
-                        if (myRect != null)
-                        {
-                            myRect.SetValue(Canvas.MarginProperty, newMargins);
-                        }
-                    }));
+                    // Dispatch UI change to game and UI
+                    game.DispatchUIChange(segmentFilter.Entities[segmentIndex].ToString(), newMargins);
                 }
             }
         }

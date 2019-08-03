@@ -17,9 +17,6 @@ namespace SnaekGaem.Src.Systems
         // Filter for the food entities
         EcsFilter<Food> foodFilter = null;
 
-        // Reference to main window
-        MainWindow mainWindow = null;
-
         // The number of food that was eaten
         int foodEaten = 0;
 
@@ -29,13 +26,9 @@ namespace SnaekGaem.Src.Systems
         // Reference to the main app
         Game game = null;
 
-        // Is there food to spawn?
-        bool spawnFood = true;
-
         // Set references
-        public FoodSystem(MainWindow mainWindow, Game game)
+        public FoodSystem(Game game)
         {
-            this.mainWindow = mainWindow;
             this.game = game;
         }
 
@@ -47,7 +40,7 @@ namespace SnaekGaem.Src.Systems
         {
             // Check if the snakes head intercepts with the food
             if (snakeFilter.Components1[0] != null && foodFilter.Components1[0] != null
-                && snakeFilter.Components1[0].segments[0].position == foodFilter.Components1[0].pose.position)
+                && snakeFilter.Components1[0].segments[0].pose.position == foodFilter.Components1[0].pose.position)
             {
                 // Mark the food for removal in ecs
                 game.SetDeletionFlag(foodFilter.Entities[0].Id);
@@ -60,13 +53,7 @@ namespace SnaekGaem.Src.Systems
                 game.SetScore(foodEaten * FOODSCORE);
 
                 // Spawn new food
-                spawnFood = true;
-            }
-
-            if (spawnFood)
-            {
                 game.CreateOnCanvas(false);
-                spawnFood = false;
             }
         }
     }

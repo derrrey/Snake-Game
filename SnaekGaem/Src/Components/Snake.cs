@@ -6,7 +6,7 @@ namespace SnaekGaem.Src.Components
     class Snake
     {
         // A snake is a list of snake segments (represented as pose)
-        public List<Pose> segments { get; set; }
+        public List<Segment> segments { get; set; }
 
         // Should the snake grow in the next update cycle?
         public bool shouldGrow { get; set; }
@@ -14,7 +14,7 @@ namespace SnaekGaem.Src.Components
         // Constructor sets fields
         public Snake()
         {
-            segments = new List<Pose>(256);
+            segments = new List<Segment>(256);
             shouldGrow = false;
         }
     }

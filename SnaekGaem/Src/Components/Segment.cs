@@ -2,12 +2,12 @@
 
 namespace SnaekGaem.Src.Components
 {
-    // Food is represented as a pose
-    class Food
+    // A snake segment is represented as a pose
+    class Segment
     {
         public Pose pose { get; set; }
 
-        public Food()
+        public Segment()
         {
             pose = new Pose();
         }
