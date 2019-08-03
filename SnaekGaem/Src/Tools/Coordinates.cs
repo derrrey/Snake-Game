@@ -2,6 +2,8 @@
  * This file specifies tools for calculations of 2-dimensional vectors.
  */
 
+using System;
+
 namespace SnaekGaem.Src.Tools
 {
     /*
@@ -81,6 +83,22 @@ namespace SnaekGaem.Src.Tools
         public static bool operator!= (Coordinates coordsA, Coordinates coordsB)
         {
             return coordsA.x != coordsB.x || coordsA.y != coordsB.y;
+        }
+
+        // Override equals method
+        public override bool Equals(object obj)
+        {
+            if (obj == null || (obj.GetType() != this.GetType()))
+                return false;
+
+            Coordinates otherCoordinates = (Coordinates)obj;
+            return this.x == otherCoordinates.x && this.y == otherCoordinates.y;
+        }
+
+        // GetHashCode() cannot be implemented for this Class, as the attributes are constantly changing during it's lifetime
+        public override int GetHashCode()
+        {
+            throw new Exception("No GetHashCode method found for class Coordinates!");
         }
 
         // Returns the opposite direction of a given coordinate
