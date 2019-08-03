@@ -93,7 +93,6 @@
     <Compile Include="Src\Game.cs" />
     <Compile Include="Src\Components\Pose.cs" />
     <Compile Include="Src\Components\Snake.cs" />
-    <Compile Include="Src\SnakeGame.cs" />
     <Compile Include="Src\Systems\FoodSystem.cs" />
     <Compile Include="Src\Systems\SnakeSystem.cs" />
     <Compile Include="Src\Tools\Coordinates.cs" />

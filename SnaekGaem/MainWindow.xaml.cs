@@ -41,8 +41,7 @@ namespace SnaekGaem
         void GameThread()
         {
             // Game setup
-            SnakeGame game = new SnakeGame(this);
-            game.GameSetup();
+            Game game = new Game(this);
 
             // Start game loop
             game.StartGameLoop();

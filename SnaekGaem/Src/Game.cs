@@ -20,6 +20,8 @@ namespace SnaekGaem.Src
     {
         // Constants
         public int segmentSize { get; }
+        const int FRAMERATE = 100;
+        const int MAXFRAMETIME = 1000 / FRAMERATE;
 
         // The ecs world instance
         public EcsWorld world { get; set; }
@@ -84,6 +86,9 @@ namespace SnaekGaem.Src
 
             // Set initial score
             SetScore(0);
+
+            // Setup game
+            GameSetup();
         }
 
         // Destroy instances in destructor
@@ -105,6 +110,44 @@ namespace SnaekGaem.Src
             Logger.Info("Destroying systems.");
             systems.Dispose();
             systems = null;
+        }
+
+        // Main game loop.
+        public void StartGameLoop()
+        {
+            Logger.Info("Starting game loop.");
+
+            // Variables for framerate syncing and deltatime
+            long frameStart;
+            long frameTime;
+
+            // Main game loop
+            while (!gameOver)
+            {
+                // Get time of frame start
+                frameStart = System.DateTime.Now.Ticks / System.TimeSpan.TicksPerMillisecond;
+
+                // Update the app
+                Update();
+
+                // Remove flagged entities
+                RemoveFlaggedEntities();
+
+                // Remove one frame components
+                world.RemoveOneFrameComponents();
+
+                // Calculate frame time
+                frameTime = (System.DateTime.Now.Ticks / System.TimeSpan.TicksPerMillisecond) - frameStart;
+
+                // Delay if time is left
+                if (MAXFRAMETIME > frameTime)
+                {
+                    System.Threading.Thread.Sleep(Convert.ToInt32(MAXFRAMETIME - frameTime));
+                }
+            }
+
+            // Remove entities
+            RemoveAllEntities();
         }
 
         // Creates an entity with given pose component
